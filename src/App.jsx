@@ -1,7 +1,8 @@
+import ConnectionStatus from './components/ConnectionStatus.jsx'
 import { STATUSES } from './lib/statuses.js'
 
-// Root component. For now it only renders the app shell and a legend of the
-// statuses; login and the game library are added in later milestones.
+// Root component. For now it renders the app shell, a legend of the statuses
+// and a database connection check; login and the game library come next.
 export default function App() {
   return (
     <div className="app">
@@ -29,6 +30,8 @@ export default function App() {
             ))}
           </ul>
         </section>
+
+        <ConnectionStatus />
       </main>
     </div>
   )

@@ -45,22 +45,33 @@ Required. Every library is personal, so a user has to be signed in before creati
 
 ## Running locally
 
-Requires [Node.js](https://nodejs.org) 20 or newer.
+Requires [Node.js](https://nodejs.org) 20 or newer and a free [Supabase](https://supabase.com) project.
 
-```bash
-git clone https://github.com/TechnoSpark-developer/steam-campaign-tracker.git
-cd steam-campaign-tracker
-npm install
-npm run dev
-```
+1. Clone the repository and install the dependencies:
 
-Then open the address Vite prints, usually <http://localhost:5173>.
+   ```bash
+   git clone https://github.com/TechnoSpark-developer/steam-campaign-tracker.git
+   cd steam-campaign-tracker
+   npm install
+   ```
+
+2. Create the database table. In the Supabase dashboard open **SQL Editor**, paste the contents of [`supabase/migrations/001_create_games.sql`](supabase/migrations/001_create_games.sql) and run it. The script creates the `games` table, turns on row-level security and grants access to signed-in users only.
+
+3. Copy `.env.example` to `.env` and fill in your project's URL and publishable key (Supabase dashboard > **Connect**).
+
+4. Start the dev server:
+
+   ```bash
+   npm run dev
+   ```
+
+   Then open the address Vite prints, usually <http://localhost:5173>.
 
 ## Roadmap
 
 - [x] Project spec
 - [x] React + Vite scaffold
-- [ ] Supabase table and row-level security
+- [x] Supabase table and row-level security
 - [ ] Register, log in, log out
 - [ ] Library: add, view, change status, delete
 - [ ] Steam library import

@@ -63,6 +63,8 @@ p {
 }
 
 .app-main {
+  display: grid;
+  gap: 16px;
   padding-top: 24px;
 }
 
@@ -124,4 +126,36 @@ p {
 
 .badge-no_campaign {
   color: var(--status-no-campaign);
+}
+
+/* Database connection check */
+.status {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.status-dot {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  margin-top: 7px;
+  border-radius: 50%;
+  background: var(--text-muted);
+}
+
+.status-title {
+  display: block;
+}
+
+.status-ok .status-dot {
+  background: var(--status-completed);
+}
+
+.status-warn .status-dot {
+  background: var(--status-playing);
+}
+
+.status-error .status-dot {
+  background: var(--danger);
 }
