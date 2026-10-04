@@ -59,9 +59,11 @@ Requires [Node.js](https://nodejs.org) 20 or newer and a free [Supabase](https:/
 
 3. Allow instant sign-up. In the Supabase dashboard go to **Authentication > Sign In / Providers > Email** and turn **Confirm email** off. Supabase's built-in mailer only delivers to members of the project's own team, so with confirmation on nobody else could finish registering.
 
-4. Copy `.env.example` to `.env` and fill in your project's URL and publishable key (Supabase dashboard > **Connect**).
+4. Deploy the Steam import function. In the Supabase dashboard open **Edge Functions > Deploy a new function > Via Editor**, name it `steam-library`, paste the contents of [`supabase/functions/steam-library/index.ts`](supabase/functions/steam-library/index.ts) and deploy. Then, under **Edge Functions > Secrets**, add a secret named `STEAM_API_KEY` holding a [Steam Web API key](https://steamcommunity.com/dev/apikey). The key stays on the server and is never sent to the browser.
 
-5. Start the dev server:
+5. Copy `.env.example` to `.env` and fill in your project's URL and publishable key (Supabase dashboard > **Connect**).
+
+6. Start the dev server:
 
    ```bash
    npm run dev
@@ -76,6 +78,6 @@ Requires [Node.js](https://nodejs.org) 20 or newer and a free [Supabase](https:/
 - [x] Supabase table and row-level security
 - [x] Register, log in, log out
 - [x] Library: add, view, change status, delete
-- [ ] Steam library import
+- [x] Steam library import
 - [ ] Filters, hide/show, search and progress stats
 - [ ] Deploy to Netlify, demo video

@@ -19,9 +19,9 @@ export default function AddGameForm({ onAdd }) {
   }
 
   return (
-    <form className="add-game" onSubmit={handleSubmit}>
-      <label className="field add-game-field">
-        <span>Add a game</span>
+    <form className="add-game tool-row" onSubmit={handleSubmit}>
+      <label className="field tool-field">
+        <span>Add a game by hand</span>
         <input
           type="text"
           name="title"

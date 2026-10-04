@@ -32,7 +32,7 @@ export default function App() {
     }
 
     // key makes the library start fresh if a different user signs in.
-    return <Library key={user.id} />
+    return <Library key={user.id} userId={user.id} />
   }
 
   return (

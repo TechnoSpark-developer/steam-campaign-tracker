@@ -1,6 +1,12 @@
 import { useState } from 'react'
 import { DEFAULT_STATUS, STATUSES } from '../lib/statuses.js'
 
+// 312 minutes -> "5.2 h played". Steam reports playtime in minutes.
+function formatPlaytime(minutes) {
+  if (minutes < 60) return `${minutes} min played`
+  return `${Math.round(minutes / 6) / 10} h played`
+}
+
 // One game in the list. It has three modes:
 //   view           - checkbox, title, status menu, Edit and Delete buttons
 //   edit           - a small form for the title and notes
@@ -107,6 +113,13 @@ export default function GameRow({ game, onUpdate, onDelete }) {
 
       <div className="game-info">
         <span className="game-title">{game.title}</span>
+        {game.steam_appid !== null && (
+          <span className="game-meta muted">
+            {game.playtime_minutes > 0
+              ? formatPlaytime(game.playtime_minutes)
+              : 'Never played'}
+          </span>
+        )}
         {game.notes && <span className="game-notes muted">{game.notes}</span>}
       </div>
 

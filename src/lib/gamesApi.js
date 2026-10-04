@@ -15,6 +15,9 @@ const COLUMNS =
 // fetched one page at a time.
 const PAGE_SIZE = 1000
 
+// How many imported games are saved per request.
+const IMPORT_BATCH_SIZE = 500
+
 function fail(action, error) {
   const offline = /failed to fetch|networkerror/i.test(error.message ?? '')
   const reason = offline
@@ -68,6 +71,37 @@ export async function updateGame(id, changes) {
 
   if (error) fail('save the change', error)
   return data
+}
+
+// CREATE or UPDATE in bulk: save a list of games that came from Steam.
+// `steamGames` is [{ appid, name, playtime_minutes }].
+//
+// "Upsert" means insert, or update if the row already exists. A row counts as
+// existing when this user already has that Steam game (the unique constraint
+// on user_id + steam_appid). Only the columns sent here are overwritten, so a
+// game's status, notes and hidden flag survive a re-import.
+export async function importSteamGames(steamGames) {
+  // One row per Steam game, even if Steam listed something twice.
+  const rowsByAppId = new Map()
+  for (const game of steamGames) {
+    rowsByAppId.set(game.appid, {
+      steam_appid: game.appid,
+      title: game.name,
+      playtime_minutes: game.playtime_minutes,
+    })
+  }
+  const rows = [...rowsByAppId.values()]
+
+  // Large libraries are sent in batches to keep each request small.
+  for (let start = 0; start < rows.length; start += IMPORT_BATCH_SIZE) {
+    const { error } = await supabase
+      .from('games')
+      .upsert(rows.slice(start, start + IMPORT_BATCH_SIZE), {
+        onConflict: 'user_id,steam_appid',
+      })
+
+    if (error) fail('save the imported games', error)
+  }
 }
 
 // DELETE: remove one game from the library.

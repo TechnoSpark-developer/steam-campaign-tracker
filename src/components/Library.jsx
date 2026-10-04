@@ -1,7 +1,15 @@
 import { useEffect, useState } from 'react'
-import { addGame, deleteGame, listGames, updateGame } from '../lib/gamesApi.js'
+import {
+  addGame,
+  deleteGame,
+  importSteamGames,
+  listGames,
+  updateGame,
+} from '../lib/gamesApi.js'
+import { fetchSteamLibrary } from '../lib/steamApi.js'
 import AddGameForm from './AddGameForm.jsx'
 import GameRow from './GameRow.jsx'
+import SteamImport from './SteamImport.jsx'
 
 // Keeps the list in the same order the database returns it: by title.
 function sortByTitle(games) {
@@ -13,8 +21,8 @@ function sortByTitle(games) {
 }
 
 // The signed-in user's game library: loads the games once, then keeps the
-// on-screen list in step with every add, edit and delete.
-export default function Library() {
+// on-screen list in step with every import, add, edit and delete.
+export default function Library({ userId }) {
   const [games, setGames] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -75,6 +83,27 @@ export default function Library() {
       setGames((current) => current.filter((game) => game.id !== id))
     })
 
+  // IMPORT: fetch the Steam library, save it, then reload the list.
+  // Errors are thrown so SteamImport can show them next to its own form.
+  async function handleImport(steamInput) {
+    const alreadyOwned = new Set(
+      games.map((game) => game.steam_appid).filter((appid) => appid !== null),
+    )
+
+    const steamLibrary = await fetchSteamLibrary(steamInput)
+    await importSteamGames(steamLibrary.games)
+    setGames(sortByTitle(await listGames()))
+
+    const importedAppIds = new Set(steamLibrary.games.map((game) => game.appid))
+    const added = [...importedAppIds].filter((appid) => !alreadyOwned.has(appid))
+
+    return {
+      steamId: steamLibrary.steamId,
+      total: importedAppIds.size,
+      added: added.length,
+    }
+  }
+
   const completed = games.filter((game) => game.status === 'completed').length
 
   return (
@@ -89,7 +118,10 @@ export default function Library() {
         )}
       </div>
 
-      <AddGameForm onAdd={handleAdd} />
+      <div className="library-tools">
+        <SteamImport userId={userId} onImport={handleImport} />
+        <AddGameForm onAdd={handleAdd} />
+      </div>
 
       {error && (
         <p className="form-message form-error" role="alert">
@@ -100,7 +132,9 @@ export default function Library() {
       {loading ? (
         <p className="muted">Loading your games…</p>
       ) : games.length === 0 ? (
-        <p className="muted">No games yet. Add your first one above.</p>
+        <p className="muted">
+          No games yet. Import your Steam library or add a game by hand.
+        </p>
       ) : (
         <ul className="game-list">
           {games.map((game) => (

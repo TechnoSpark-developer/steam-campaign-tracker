@@ -298,15 +298,34 @@ p {
   gap: 4px 16px;
 }
 
-.add-game {
+/* Import from Steam + add by hand, side by side on wide screens */
+.library-tools {
+  display: grid;
+  gap: 18px;
+  align-items: start;
+}
+
+@media (min-width: 820px) {
+  .library-tools {
+    grid-template-columns: 1.4fr 1fr;
+  }
+}
+
+.steam-import {
+  display: grid;
+  gap: 8px;
+}
+
+/* A text box with its button on the same line */
+.tool-row {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
   gap: 10px;
 }
 
-.add-game-field {
-  flex: 1 1 220px;
+.tool-field {
+  flex: 1 1 200px;
 }
 
 .game-list {
@@ -352,6 +371,10 @@ p {
 .game-completed .game-title {
   color: var(--text-muted);
   text-decoration: line-through;
+}
+
+.game-meta {
+  font-size: 0.8rem;
 }
 
 .game-notes {
