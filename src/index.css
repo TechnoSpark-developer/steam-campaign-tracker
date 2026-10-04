@@ -15,6 +15,14 @@
   --status-completed: #7bd88f;
   --status-no-campaign: #b39df3;
 
+  /* Darker steps of the same hues, for dots and the progress bar. The three
+     colored ones were checked to stay distinguishable for colorblind readers. */
+  --mark-not-started: #8794a5;
+  --mark-playing: #c98500;
+  --mark-completed: #199e70;
+  --mark-no-campaign: #9085e9;
+  --meter-track: #173f33;
+
   --radius: 10px;
   font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   line-height: 1.5;
@@ -208,6 +216,9 @@ p {
 .tab:focus-visible,
 .game-check:focus-visible,
 .status-select:focus-visible,
+.chip:focus-visible,
+.check input:focus-visible,
+.field select:focus-visible,
 .field input:focus-visible,
 .field textarea:focus-visible {
   outline: 2px solid var(--accent);
@@ -290,12 +301,156 @@ p {
 }
 
 /* Library */
-.library-header {
+/* Progress summary */
+.stats {
+  display: grid;
+  gap: 8px;
+}
+
+.stats-line {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  justify-content: space-between;
-  gap: 4px 16px;
+  gap: 4px 12px;
+}
+
+.stats-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+/* The filled part and the track behind it are two steps of the same green. */
+.meter {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 4px;
+  background: var(--meter-track);
+}
+
+.meter-fill {
+  height: 100%;
+  border-radius: 0 4px 4px 0;
+  background: var(--mark-completed);
+  transition: width 0.3s ease;
+}
+
+/* Search, sort, status buttons, show hidden */
+.filters {
+  display: grid;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.filters-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 10px 12px;
+}
+
+.filters-search {
+  flex: 1 1 220px;
+}
+
+.field select {
+  padding: 9px 11px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-weight: 400;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 11px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.chip:hover {
+  border-color: var(--accent);
+}
+
+.chip[aria-pressed='true'] {
+  border-color: var(--accent);
+  background: var(--surface-raised);
+  color: var(--text);
+}
+
+.chip-count {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+.dot-not_started {
+  background: var(--mark-not-started);
+}
+
+.dot-playing {
+  background: var(--mark-playing);
+}
+
+.dot-completed {
+  background: var(--mark-completed);
+}
+
+.dot-no_campaign {
+  background: var(--mark-no-campaign);
+}
+
+.check {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  justify-self: start;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.check input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--accent-strong);
+}
+
+.list-summary {
+  font-size: 0.85rem;
+}
+
+.empty-match {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.show-more {
+  justify-self: center;
 }
 
 /* Import from Steam + add by hand, side by side on wide screens */
@@ -375,6 +530,23 @@ p {
 
 .game-meta {
   font-size: 0.8rem;
+}
+
+/* Hidden games only appear when "Show hidden games" is ticked. */
+.game-hidden .game-info {
+  opacity: 0.6;
+}
+
+.tag {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 1px 7px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-decoration: none;
+  vertical-align: middle;
 }
 
 .game-notes {

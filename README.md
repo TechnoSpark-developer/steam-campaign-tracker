@@ -79,5 +79,5 @@ Requires [Node.js](https://nodejs.org) 20 or newer and a free [Supabase](https:/
 - [x] Register, log in, log out
 - [x] Library: add, view, change status, delete
 - [x] Steam library import
-- [ ] Filters, hide/show, search and progress stats
+- [x] Filters, hide/show, search and progress stats
 - [ ] Deploy to Netlify, demo video

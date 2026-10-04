@@ -8,7 +8,7 @@ function formatPlaytime(minutes) {
 }
 
 // One game in the list. It has three modes:
-//   view           - checkbox, title, status menu, Edit and Delete buttons
+//   view           - checkbox, title, status menu, Edit, Hide and Delete buttons
 //   edit           - a small form for the title and notes
 //   confirm_delete - asks before deleting, so one stray click is harmless
 //
@@ -99,7 +99,9 @@ export default function GameRow({ game, onUpdate, onDelete }) {
   }
 
   return (
-    <li className={`game ${isCompleted ? 'game-completed' : ''}`}>
+    <li
+      className={`game ${isCompleted ? 'game-completed' : ''} ${game.hidden ? 'game-hidden' : ''}`}
+    >
       <input
         type="checkbox"
         className="game-check"
@@ -112,7 +114,10 @@ export default function GameRow({ game, onUpdate, onDelete }) {
       />
 
       <div className="game-info">
-        <span className="game-title">{game.title}</span>
+        <span className="game-title">
+          {game.title}
+          {game.hidden && <span className="tag">Hidden</span>}
+        </span>
         {game.steam_appid !== null && (
           <span className="game-meta muted">
             {game.playtime_minutes > 0
@@ -166,6 +171,15 @@ export default function GameRow({ game, onUpdate, onDelete }) {
             onClick={startEditing}
           >
             Edit
+          </button>
+          <button
+            type="button"
+            className="btn"
+            aria-label={`${game.hidden ? 'Unhide' : 'Hide'} ${game.title}`}
+            disabled={busy}
+            onClick={() => save({ hidden: !game.hidden })}
+          >
+            {game.hidden ? 'Unhide' : 'Hide'}
           </button>
           <button
             type="button"
