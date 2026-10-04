@@ -130,38 +130,6 @@ p {
   color: var(--status-no-campaign);
 }
 
-/* Database connection check */
-.status {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-}
-
-.status-dot {
-  flex: none;
-  width: 10px;
-  height: 10px;
-  margin-top: 7px;
-  border-radius: 50%;
-  background: var(--text-muted);
-}
-
-.status-title {
-  display: block;
-}
-
-.status-ok .status-dot {
-  background: var(--status-completed);
-}
-
-.status-warn .status-dot {
-  background: var(--status-playing);
-}
-
-.status-error .status-dot {
-  background: var(--danger);
-}
-
 /* Signed-in user in the header */
 .app-user {
   display: flex;
@@ -225,9 +193,23 @@ p {
   background: var(--accent);
 }
 
+.btn-danger {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.btn-danger:hover {
+  border-color: var(--danger);
+  background: var(--danger);
+  color: #1b0d0e;
+}
+
 .btn:focus-visible,
 .tab:focus-visible,
-.field input:focus-visible {
+.game-check:focus-visible,
+.status-select:focus-visible,
+.field input:focus-visible,
+.field textarea:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
@@ -276,7 +258,8 @@ p {
   font-weight: 400;
 }
 
-.field input {
+.field input,
+.field textarea {
   width: 100%;
   padding: 9px 11px;
   border: 1px solid var(--border);
@@ -300,4 +283,124 @@ p {
 
 .form-notice {
   color: var(--status-completed);
+}
+
+.field textarea {
+  resize: vertical;
+}
+
+/* Library */
+.library-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 16px;
+}
+
+.add-game {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.add-game-field {
+  flex: 1 1 220px;
+}
+
+.game-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* One game: checkbox | title + notes | status menu | buttons */
+.game {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 10px 12px;
+  padding: 12px 0;
+  border-top: 1px solid var(--border);
+}
+
+.game-check {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  accent-color: var(--status-completed);
+  cursor: pointer;
+}
+
+.game-check:disabled {
+  cursor: not-allowed;
+}
+
+.game-info {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.game-title {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+/* Completed games are crossed off the list. */
+.game-completed .game-title {
+  color: var(--text-muted);
+  text-decoration: line-through;
+}
+
+.game-notes {
+  font-size: 0.9rem;
+  overflow-wrap: anywhere;
+}
+
+.status-select {
+  min-width: 8.2rem;
+  padding: 6px 8px;
+  border: 1px solid currentColor;
+  border-radius: 8px;
+  background: var(--bg);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.status-select option {
+  background: var(--surface);
+  color: var(--text);
+}
+
+.game-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.game-actions .btn {
+  padding: 6px 10px;
+  font-size: 0.85rem;
+}
+
+.game-edit {
+  grid-column: 1 / -1;
+}
+
+/* Small screens: controls drop below the title. */
+@media (max-width: 640px) {
+  .game {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .game .status-select,
+  .game > .game-actions {
+    grid-column: 2;
+    justify-self: start;
+  }
 }

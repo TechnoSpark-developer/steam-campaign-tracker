@@ -1,12 +1,13 @@
 import AuthForm from './components/AuthForm.jsx'
-import ConnectionStatus from './components/ConnectionStatus.jsx'
 import Intro from './components/Intro.jsx'
+import Library from './components/Library.jsx'
+import SetupNotice from './components/SetupNotice.jsx'
 import { useSession } from './hooks/useSession.js'
 import { isSupabaseConfigured, supabase } from './lib/supabaseClient.js'
 
 // Root component. Decides what to show based on who is signed in:
 //   - nobody  -> intro + sign in / register form
-//   - a user  -> their library (for now, a check that their data is readable)
+//   - a user  -> their game library
 export default function App() {
   const { session, loading } = useSession()
   const user = session?.user
@@ -17,8 +18,7 @@ export default function App() {
   }
 
   function renderMain() {
-    // .env is missing: ConnectionStatus explains how to fix it.
-    if (!isSupabaseConfigured) return <ConnectionStatus />
+    if (!isSupabaseConfigured) return <SetupNotice />
 
     if (loading) return <p className="muted">Loading…</p>
 
@@ -31,8 +31,8 @@ export default function App() {
       )
     }
 
-    // key makes the check run again if a different user signs in.
-    return <ConnectionStatus key={user.id} />
+    // key makes the library start fresh if a different user signs in.
+    return <Library key={user.id} />
   }
 
   return (

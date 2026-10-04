@@ -75,7 +75,7 @@ Requires [Node.js](https://nodejs.org) 20 or newer and a free [Supabase](https:/
 - [x] React + Vite scaffold
 - [x] Supabase table and row-level security
 - [x] Register, log in, log out
-- [ ] Library: add, view, change status, delete
+- [x] Library: add, view, change status, delete
 - [ ] Steam library import
 - [ ] Filters, hide/show, search and progress stats
 - [ ] Deploy to Netlify, demo video
