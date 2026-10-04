@@ -2,8 +2,8 @@
 
 A web app that receives a list of purchased titles in a user's Steam library, and the user can manually checkmark or cross off games in their library that have a campaign/story and have been completed (similar to a movie watchlist).
 
-- **Live app:** _link added after deployment_
-- **Demo video:** _link added after recording_
+- **Live app:** <https://dulcet-tarsier-b09523.netlify.app>
+- **Demo video:** <https://www.youtube.com/watch?v=ES4M2WRQpPU>
 
 ## What the app does
 
@@ -155,4 +155,5 @@ This project was built for EGN 4952C (Engineering Design 2) as an exercise in di
 - [x] Library: add, view, change status, delete
 - [x] Steam library import
 - [x] Filters, hide/show, search and progress stats
-- [ ] Deploy to Netlify, demo video
+- [x] Deploy to Netlify
+- [x] Demo video
