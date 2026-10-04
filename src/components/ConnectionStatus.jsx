@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
 import { isSupabaseConfigured, supabase } from '../lib/supabaseClient.js'
 
-// Asks Supabase for one row of the games table and turns the answer into a
-// status the user can read. Nobody is signed in yet, so the *expected* answer
-// is "permission denied": it proves the table exists and is locked down.
+// Shown once a user is signed in. Counts the rows of the games table that the
+// database lets this user see and turns the answer into a readable status.
+// It proves that a signed-in user can read their own data; the real library
+// screen replaces it in the next milestone.
 async function checkConnection() {
   if (!isSupabaseConfigured) {
     return {
@@ -14,23 +15,28 @@ async function checkConnection() {
     }
   }
 
-  const { error } = await supabase.from('games').select('id').limit(1)
+  const { count, error } = await supabase
+    .from('games')
+    .select('id', { count: 'exact' })
+    .limit(1)
 
   if (!error) {
+    const total = count ?? 0
     return {
       level: 'ok',
-      title: 'Connected',
-      detail: 'The games table is reachable.',
+      title: 'Signed in and connected',
+      detail: `The database returned ${total} ${total === 1 ? 'game' : 'games'} for your account. Adding games comes next.`,
     }
   }
 
-  // 42501 = Postgres "insufficient privilege".
+  // 42501 = Postgres "insufficient privilege": the table exists but signed-in
+  // users were never granted access to it.
   if (error.code === '42501') {
     return {
-      level: 'ok',
-      title: 'Connected',
+      level: 'error',
+      title: 'Signed in, but access to the games table was denied',
       detail:
-        'The games table exists and is locked to signed-in users, which is what we want before login is added.',
+        'Run section 4 (Data API access) of supabase/migrations/001_create_games.sql in the Supabase SQL Editor.',
     }
   }
 
@@ -72,7 +78,7 @@ export default function ConnectionStatus() {
 
   return (
     <section className="card">
-      <h2>Database connection</h2>
+      <h2>Your library</h2>
       <p className={`status status-${status.level}`} role="status">
         <span className="status-dot" aria-hidden="true" />
         <span>
