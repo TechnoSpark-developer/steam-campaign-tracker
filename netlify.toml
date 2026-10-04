@@ -1,0 +1,13 @@
+# Netlify reads this file to know how to build and publish the app.
+#
+# The two Supabase settings (VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY)
+# are not stored here. They are added in the Netlify dashboard under
+# Project configuration > Environment variables, the same values as in .env.
+
+[build]
+  # Vite bundles the app into the dist folder, and Netlify serves that folder.
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
